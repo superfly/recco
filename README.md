@@ -8,10 +8,10 @@ Scanners can be of type: runtime, framework, service, e.g. ruby, rails, sidekiq.
 
 Roughly, here's how it should work:
 
-	1. Run a source three through all scanners in scanners/*.yml
-  2. For matched runtimes, extract the version to inform package installers (like the Ruby version from `.ruby-version` or `Gemfile`)
-	3. For matched frameworks, extract versions to inform setting secrets (like `RAILS_MASTER_KEY` from `config/master.key`)
-	4. For service matches, set env vars and secrets like puma WEB_CONCURRENCY and 'puma -c config/puma.rb'
+1. Run a source three through all scanners in scanners/*.yml
+2. For matched runtimes, extract the version to inform package installers (like the Ruby version from `.ruby-version` or `Gemfile`)
+3. For matched frameworks, extract versions to inform setting secrets (like `RAILS_MASTER_KEY` from `config/master.key`)
+4. For matched services, set env vars and secrets like puma WEB_CONCURRENCY and 'puma -c config/puma.rb'
 
 This is the main scope. One could imagine this being extended to run commands for deploy preparation, for example to create a [Docker-based release for Phoenix](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Release.html).
 ## Reasoning
