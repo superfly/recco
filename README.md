@@ -2,21 +2,27 @@ Recco extracts information from application source trees to inform and simplify 
 
 ## Concepts
 
-In Recco, knowledge about runtimes, frameworks and common services are encoded in YAML files called *scanners*. Here's a [scanner for Rails apps](scanners/rails.yml). A lightweight Golang library and CLI will take a source tree as an input, and spit out a YAML *deployment spec*. This spec should be picked up by deployment systems. The idea is for this tool to be runnable continuously - every time it's deployed.
+Recco has one simple goal: given an application source tree, it will generate a *YAML deployment specification* to be used by build systems and deployment platforms. Recco should have few dependencies and be runnable at deploy time to catch changes made in the source tree.
 
-Scanners can be of type: runtime, framework, service, e.g. ruby, rails, sidekiq.
+Knowledge about runtimes, frameworks and common application services is encoded in YAML files called *scanners*. Here's a sample [scanner for Rails apps](scanners/rails.yml).  
 
-Roughly, here's how it should work:
+Scanners can be of different types with different rules: runtime (ruby), framework (rails) or service (sidekiq). We know things about each of these, such as whether YJIT is available (Ruby 3.1.1 and above), whether to set `RAILS_MASTER_KEY` (if credentials are present) or whether to run a second process for the app (a Sidekiq worker).
 
-1. Run a source three through all scanners in scanners/*.yml
+## Implementation dieas 
+
+Roughly, here's how it could work:
+
+1. Run a source three through all scanners in `scanners/*.yml`
 2. For matched runtimes, extract the version to inform package installers (like the Ruby version from `.ruby-version` or `Gemfile`)
 3. For matched frameworks, extract versions to inform setting secrets (like `RAILS_MASTER_KEY` from `config/master.key`)
 4. For matched services, set env vars and secrets like puma WEB_CONCURRENCY and 'puma -c config/puma.rb'
+5. Export a YAML spec intended to be versioned in source trees and picked up by build systems
 
-This is the main scope. One could imagine this being extended to run commands for deploy preparation, for example to create a [Docker-based release for Phoenix](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Release.html).
-## Reasoning
+One could imagine this being extended to run commands for deploy preparation, for example to create a [Docker-based release for Phoenix](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Release.html).
 
-Today, information about configuring deployments is locked up in Dockerfiles, buildpacks, platform-specific tooling and developers heads. Developers are no longer comfortable saying "Just deploy on Heroku". We need a way to break out of that mindset with confidence and without a degree in Dockerfiles.
+## Why do we need this?
+
+Today, information about configuring deployments is locked up in Dockerfiles, buildpacks, platform-specific tooling and developers heads. Developers are no longer comfortable saying "Just deploy on Heroku". We need a way to break out of that mindset with confidence and without a degree in Dockerfiles. You've probably run into a lot of problems unrelated to your app code that you've quietly erased from your memory. The goal is to reduce friction at deploy time while also educating developers about what's possible.
 
 ## What about Buildpacks? 
 
