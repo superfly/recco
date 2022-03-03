@@ -1,0 +1,12 @@
+matcher:
+  - file: Gemfile
+    regex: \n\s{4}(?<name>.+)\s\((.+)+\)
+    package: rails
+secrets:
+  - key: RAILS_MASTER_KEY
+    error_message: We couldn't find a suitable source for setting RAILS_MASTER_KEY, so it's been set to a placeholder value
+    source_files:
+      # Standard location for apps without per-environment credentials
+      - config/master.key
+      # Common location for apps with per-environment credentials
+      - config/credentials/production.key
