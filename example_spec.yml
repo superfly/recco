@@ -1,0 +1,27 @@
+runtime:
+  name: ruby
+  version: 2.7.5
+  yjit: true
+  jemalloc: true
+framework:
+  name: rails
+  version: 7.0.1.2
+  secrets:
+    - key: RAILS_MASTER_KEY
+      from_file: config/master.key
+      required: true
+    - key: DATABASE_URL
+      required: true
+services:
+  - name: puma
+    command: puma -c config/puma.rb
+    env:
+      # Possibly detect CPU and configure this at runtime?
+      WEB_CONCURRENCY: 2
+      RAILS_MAX_THREADS: 5
+      RAILS_SERVE_STATIC_FILES: true
+  - name: sidekiq
+    command: sidekiq  
+    env:
+      # Possibly detect this at runtime?
+      SIDEKIQ_CONCURRENCY: 2
