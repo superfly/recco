@@ -2,7 +2,7 @@ Recco extracts information from application source trees to inform and simplify 
 
 ## Concepts
 
-In Recco, knowledge about runtimes, frameworks and common services are encoded in YAML files called *scanners*. A lightweight Golang library and CLI will take a source tree as an input, and spit out a YAML *deployment spec*. This spec should be picked up by deployment systems. The idea is for this tool to be runnable continuously - every time it's deployed.
+In Recco, knowledge about runtimes, frameworks and common services are encoded in YAML files called *scanners*. Here's a [scanner for Rails apps](scanners/rails.yml). A lightweight Golang library and CLI will take a source tree as an input, and spit out a YAML *deployment spec*. This spec should be picked up by deployment systems. The idea is for this tool to be runnable continuously - every time it's deployed.
 
 Scanners can be of type: runtime, framework, service, e.g. ruby, rails, sidekiq.
 
