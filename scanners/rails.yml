@@ -1,6 +1,7 @@
 matcher:
   - file: Gemfile
-    regex: \n\s{4}(?<name>.+)\s\((.+)+\)
+    # These regex should at least name 'name' and 'version'
+    regex: \n\s{4}(?<name>.+)\s\((?<version>.+)+\)
     package: rails
 secrets:
   - key: RAILS_MASTER_KEY
